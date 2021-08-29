@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+option go_package = "github.com/Prithvipal/proto-buffer";
+
+import "2-basic-part-2/practice/4-city-with-package.proto";
+
+package street;
+
+message Street{
+    string street_name = 1;
+    city.City city_name = 2;
+}
