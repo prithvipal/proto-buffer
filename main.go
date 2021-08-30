@@ -5,15 +5,27 @@ import (
 	"io/ioutil"
 	"log"
 
+	"github.com/Prithvipal/proto-buffer/src/enumexample/enumexamplepb"
 	"github.com/Prithvipal/proto-buffer/src/simple/simplepb"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
 )
 
 func main() {
-	sm := dosimlpe()
-	readAndWriteDemo(sm)
-	jsonDemo(sm)
+	// sm := dosimlpe()
+	// readAndWriteDemo(sm)
+	// jsonDemo(sm)
+
+	doenum()
+}
+
+func doenum() {
+	em := enumexamplepb.EnumMessage{
+		Id:           42,
+		DayOfTheWeek: enumexamplepb.DayOfTheWeek_THURSDAY,
+	}
+	em.DayOfTheWeek = enumexamplepb.DayOfTheWeek_MONDAY
+	fmt.Println(em)
 }
 
 func jsonDemo(pb proto.Message) {
@@ -25,6 +37,7 @@ func jsonDemo(pb proto.Message) {
 	fmt.Println("*********")
 	fmt.Printf("%+v", sm)
 }
+
 func toJSON(pb proto.Message) string {
 	jStr, err := protojson.Marshal(pb)
 	if err != nil {
@@ -42,6 +55,7 @@ func fromJSON(in string, pb proto.Message) proto.Message {
 	}
 	return pb
 }
+
 func readAndWriteDemo(sm proto.Message) {
 	writeToFile("simple.bin", sm)
 	sm2 := simplepb.SimpleMessage{}
