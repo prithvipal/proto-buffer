@@ -6,14 +6,42 @@ import (
 	"log"
 
 	"github.com/Prithvipal/proto-buffer/src/simple/simplepb"
+	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
 )
 
 func main() {
 	sm := dosimlpe()
 	readAndWriteDemo(sm)
+	jsonDemo(sm)
 }
 
+func jsonDemo(pb proto.Message) {
+	res := toJSON(pb)
+	fmt.Println("========")
+	fmt.Println(res)
+	var sm simplepb.SimpleMessage
+	fromJSON(res, &sm)
+	fmt.Println("*********")
+	fmt.Printf("%+v", sm)
+}
+func toJSON(pb proto.Message) string {
+	jStr, err := protojson.Marshal(pb)
+	if err != nil {
+		log.Fatalln("can't marshall to json", err)
+		return ""
+	}
+	return string(jStr)
+}
+
+func fromJSON(in string, pb proto.Message) proto.Message {
+	err := protojson.Unmarshal([]byte(in), pb)
+	if err != nil {
+		log.Fatal("can't unmarshall from json", err)
+		return nil
+	}
+	return pb
+}
 func readAndWriteDemo(sm proto.Message) {
 	writeToFile("simple.bin", sm)
 	sm2 := simplepb.SimpleMessage{}
